@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class MoveWheels : MonoBehaviour
 {
-    public float speedScale = 200;
-    public GameObject gameController;
+    public float speedScale = 1000; 
     private HingeJoint RightWheelJoint; 
     private HingeJoint LeftWheelJoint;
+
+    
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,22 +30,34 @@ public class MoveWheels : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float forwardInput = Input.GetAxis("Vertical");
-        float leftrightInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis("CarTurn"); 
+        float verticalInput = Input.GetAxis("CarForward");
 
-        var LeftMotor = LeftWheelJoint.motor;
-        LeftMotor.targetVelocity = -speedScale * forwardInput - speedScale * leftrightInput;
-        LeftWheelJoint.motor = LeftMotor;
+        if (horizontalInput == -1) {
+            SetJointSpeed(LeftWheelJoint, 1*speedScale);
+            SetJointSpeed(RightWheelJoint, -1* speedScale);
+        } else if (horizontalInput == 1) {
+            SetJointSpeed(LeftWheelJoint, -1*speedScale);
+            SetJointSpeed(RightWheelJoint, 1*speedScale);
+        } else if (verticalInput == 1) {
+            SetJointSpeed(LeftWheelJoint, 1*speedScale);
+            SetJointSpeed(RightWheelJoint, 1*speedScale);
+        } else if (verticalInput == -1) {
+            SetJointSpeed(LeftWheelJoint, -1*speedScale);
+            SetJointSpeed(RightWheelJoint, -1*speedScale);
+        } else if (verticalInput ==  0 && horizontalInput == 0) {
+            SetJointSpeed(LeftWheelJoint,0); 
+            SetJointSpeed(RightWheelJoint,0); 
+        }
 
-        var RightMotor = RightWheelJoint.motor;
-        RightMotor.targetVelocity = -speedScale * forwardInput + speedScale * leftrightInput;
-        RightWheelJoint.motor = RightMotor;
+        // Debug.Log($"Speed: ({LeftWheelJoint.motor.targetVelocity} {RightWheelJoint.motor.targetVelocity})");
+        // Debug.Log($"INPUTS: ({horizontalInput} {verticalInput})");
+    }
 
-        //Debug.Log($"({LeftMotor.targetVelocity} {RightMotor.targetVelocity})");
-        //Debug.Log($"({forwardInput} {leftrightInput})");
-        Transform sensor = gameObject.transform.Find("Cube");
-        Debug.Log(Time.time);
 
-        Debug.Log(gameController.GetComponent<ReadHeatData>().GetCurrentHeatDataPoint(sensor.position.x, 0, sensor.position.z));
+    private void SetJointSpeed(HingeJoint joint, float speed) {
+        JointMotor motor = joint.motor;
+        motor.targetVelocity = speed;
+        joint.motor = motor;
     }
 }
