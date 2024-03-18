@@ -42,7 +42,7 @@ public class MoveWheels2 : MonoBehaviour
         //Debug.Log($"({LeftMotor.targetVelocity} {RightMotor.targetVelocity})");
         //Debug.Log($"({forwardInput} {leftrightInput})");
         Transform sensor = gameObject.transform.Find("Cube");
-        Debug.Log(Time.time);
+        //Debug.Log(Time.time);
 
         Debug.Log(gameController.GetComponent<ReadHeatData>().GetCurrentHeatDataPoint(sensor.position.x, 0, sensor.position.z));
     }
