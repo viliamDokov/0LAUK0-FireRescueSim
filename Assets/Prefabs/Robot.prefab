@@ -686,6 +686,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedScale: 100
+  minimap: {fileID: 0}
+  gameController: {fileID: 0}
 --- !u!1 &3882705174006860486
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,7 +974,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!138 &4458981492623655077
 FixedJoint:
@@ -1015,4 +1017,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lidar: {fileID: 8719756550191569592}
-  LidarBall: {fileID: 6389494577814924252, guid: 6691a3117ec63eb4abd1afd565b5e8cb, type: 3}
+  minimap: {fileID: 0}

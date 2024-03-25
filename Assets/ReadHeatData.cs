@@ -26,7 +26,7 @@ public class ReadHeatData : MonoBehaviour
         {
             for (int j = 0; j < y; j++)
             {
-                fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i / 2, 0, (float)j / 2), Quaternion.identity);
+                fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i, 0, (float)j), Quaternion.identity);
             }
         }
     }
@@ -38,7 +38,7 @@ public class ReadHeatData : MonoBehaviour
         {
             for (int j = 0; j < y; j++)
             {
-                float temp = GetCurrentHeatDataPoint((float)i / 2, 0, (float)j / 2);
+                float temp = GetCurrentHeatDataPoint((float)i, 0, (float)j);
                 //Debug.Log(temp);
                 fireCubes[i, j].GetComponent<Renderer>().material.SetColor("_Color", new Color(temp/100f, 0f, 0f, 0.7f));
                 //Debug.Log(fireCubes[i, j].GetComponent<Renderer>().material.GetColor("_Color"));
@@ -88,7 +88,7 @@ public class ReadHeatData : MonoBehaviour
     }
     private int NormalizeX(float x)
     {
-        return Mathf.RoundToInt(x * 2);
+        return Mathf.RoundToInt(x);
     }
     private int NormalizeY(float y)
     {
@@ -97,7 +97,7 @@ public class ReadHeatData : MonoBehaviour
     }
     private int NormalizeZ(float z)
     {
-        return Mathf.RoundToInt(z * 2);
+        return Mathf.RoundToInt(z);
     }
 
     public float GetCurrentHeatDataPoint(float x, float y, float z)
