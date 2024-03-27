@@ -12,7 +12,7 @@ public class MoveWheels : MonoBehaviour
     private Transform body;
 
     public GameObject minimap;
-    public GameObject gameController;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +48,8 @@ public class MoveWheels : MonoBehaviour
         Transform sensor = gameObject.transform.Find("Cube");
         //Debug.Log(Time.time);
         Debug.Log(sensor.position.x + " " + sensor.position.z);
-        Debug.Log(Mathf.RoundToInt((sensor.position.x + 50) / 5f) + " " + Mathf.RoundToInt((sensor.position.z + 50) / 5f));
-        float temp = gameController.GetComponent<ReadHeatData>().GetCurrentHeatDataPoint(sensor.position.x, 0, sensor.position.z);
+        Debug.Log(gameObject.GetComponent<ReadHeatData>().NormalizeX(sensor.position.x) + " " + gameObject.GetComponent<ReadHeatData>().NormalizeZ(sensor.position.z));
+        float temp = gameObject.GetComponent<ReadHeatData>().GetCurrentHeatDataPoint(sensor.position.x, 0, sensor.position.z);
         Debug.Log(temp);
         SetFireColor(temp);
     }

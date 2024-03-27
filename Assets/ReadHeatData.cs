@@ -15,8 +15,12 @@ public class ReadHeatData : MonoBehaviour
     int x = 0;
     int y = 0;
 
-    float x_coef = 1;
-    float y_coef = 1;
+    public float x_coef = 5;
+    public float x_const = 50;
+    public float y_coef = 5;
+    public float y_const = 50;
+    public bool inverted = false;
+
     public GameObject fireCubePrefab;
 
     private GameObject[,] fireCubes;
@@ -33,7 +37,8 @@ public class ReadHeatData : MonoBehaviour
         {
             for (int j = 0; j < y; j++)
             {
-                fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i * 5 - 50, 2, (float)j * 5 - 50), Quaternion.identity);
+                fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i * x_coef - x_const, 2, (float)j * y_coef - y_const), Quaternion.identity);
+                fireCubes[i, j].transform.localScale = new Vector3(x_coef, 0.1f, y_coef);
             }
         }
     }
@@ -45,7 +50,7 @@ public class ReadHeatData : MonoBehaviour
         {
             for (int j = 0; j < y; j++)
             {
-                float temp = GetCurrentHeatDataPoint((float)i * 5 - 50, 0, (float)j * 5 - 50);
+                float temp = GetCurrentHeatDataPoint((float)i * x_coef - x_const, 0, (float)j * y_coef - y_const);
                 //Debug.Log(temp);
                 fireCubes[i, j].GetComponent<Renderer>().material.SetColor("_Color", new Color(temp/100f, 0f, 0f, 0.7f));
                 //Debug.Log(fireCubes[i, j].GetComponent<Renderer>().material.GetColor("_Color"));
@@ -61,17 +66,27 @@ public class ReadHeatData : MonoBehaviour
         string[] dataLines = heatValuesAsset.text.Split('\n');
         string[] dataDimensions = dataLines[0].Split(", ");
         int timestampCount = int.Parse(dataDimensions[0]);
-        x = int.Parse(dataDimensions[1]);
-        y = int.Parse(dataDimensions[2]);
-        string[] roomDimenstions = dataLines[1].Split(", ");
-        x_coef = (float)(x - 1) / int.Parse(roomDimenstions[0]);
-        y_coef = (float)(y - 1) / int.Parse(roomDimenstions[1]);
-        Debug.Log(x_coef +" "+ y_coef);
+
+        if(inverted)
+        {
+            y = int.Parse(dataDimensions[1]);
+            x = int.Parse(dataDimensions[2]);
+        }
+        else
+        {
+            x = int.Parse(dataDimensions[1]);
+            y = int.Parse(dataDimensions[2]);
+        }
+        //string[] roomDimenstions = dataLines[1].Split(", ");
+        //x_coef = (float)(x - 1) / int.Parse(roomDimenstions[0]);
+        //y_coef = (float)(y - 1) / int.Parse(roomDimenstions[1]);
+        //Debug.Log(x_coef +" "+ y_coef);
         string[] timestampsString = dataLines[2].Split(", ");
 
         heatValues = new float[timestampCount][,,];
         timestamps = new float[timestampCount];
-
+        Debug.Log(timestampCount);
+        Debug.Log(x + " " +  y);
         for (int j = 0; j < timestampCount; j++)
         {
             //Debug.Log(timestampsString[j]);
@@ -89,7 +104,10 @@ public class ReadHeatData : MonoBehaviour
                 for(int k = 0; k < y; k++)
                 {
                     //Debug.Log(j + " " + i + " " + k);
-                    heatValues[j][i, 0, k] = float.Parse(temperatures[i + k * y]);
+                    //Debug.Log(temperatures[i + k * x]);
+                    //Debug.Log(i + k * x);
+                    //Debug.Log(i + " " + k);
+                    heatValues[j][i, 0, k] = float.Parse(temperatures[i + k * x]);
                     //Debug.Log(heatValues[j][i, 0, k]);
                 }
                 
@@ -97,18 +115,18 @@ public class ReadHeatData : MonoBehaviour
 
         }
     }
-    private int NormalizeX(float x)
+    public int NormalizeX(float x)
     {
-        return Mathf.RoundToInt((x + 50) / 5f);
+        return Mathf.RoundToInt((x + x_const) / x_coef);
     }
     private int NormalizeY(float y)
     {
         //return Mathf.RoundToInt(y * );
         return 0;
     }
-    private int NormalizeZ(float z)
+    public int NormalizeZ(float z)
     {
-        return Mathf.RoundToInt((z + 50) / 5f);
+        return Mathf.RoundToInt((z + y_const) / y_coef);
     }
 
     public float GetCurrentHeatDataPoint(float x, float y, float z)

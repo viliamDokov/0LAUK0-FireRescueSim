@@ -1536,20 +1536,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3178235585181175570, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
   m_PrefabInstance: {fileID: 2048885200}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &631671180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631671179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b056744e6ea135409afe7a6eaf8f42b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireCubePrefab: {fileID: 5305428867940792504, guid: c02fdf0e144c6f840979c972b8d9263f, type: 3}
-  heatValuesAsset: {fileID: 4900000, guid: 960da7109b2c1174382be0e04667523e, type: 3}
 --- !u!1 &634682838
 GameObject:
   m_ObjectHideFlags: 0
@@ -4842,10 +4828,7 @@ PrefabInstance:
     - {fileID: 3701023723900650617, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3178235585181175570, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 631671180}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
 --- !u!1 &2058296321 stripped
 GameObject:

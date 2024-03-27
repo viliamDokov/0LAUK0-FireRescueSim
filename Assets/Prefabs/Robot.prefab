@@ -637,6 +637,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1980575972950110290}
   - component: {fileID: 6941074834222528398}
+  - component: {fileID: 3441147275738258967}
   m_Layer: 6
   m_Name: Robot
   m_TagString: Untagged
@@ -676,9 +677,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 070684c6afe69a94c823b49baa252f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedScale: 100
+  speedScale: 200
   minimap: {fileID: 0}
-  gameController: {fileID: 0}
+--- !u!114 &3441147275738258967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3178235585181175570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b056744e6ea135409afe7a6eaf8f42b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x_coef: 5
+  x_const: 50
+  y_coef: 5
+  y_const: 50
+  inverted: 0
+  fireCubePrefab: {fileID: 5305428867940792504, guid: c02fdf0e144c6f840979c972b8d9263f, type: 3}
+  heatValuesAsset: {fileID: 0}
 --- !u!1 &3882705174006860486
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class MinimapDrawer : MonoBehaviour
     
     public void Paint(int x, int y, Color color)
     {
-        Vector3Int pos = new Vector3Int(x, y, 0);
+        Vector3Int pos = new Vector3Int(x/4, y/4, 0);
         tilemap.SetTile(pos, whiteSquare);
         tilemap.SetTileFlags(pos, TileFlags.None);
         tilemap.SetColor(pos, color);
