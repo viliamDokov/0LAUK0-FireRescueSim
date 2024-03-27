@@ -14,19 +14,26 @@ public class ReadHeatData : MonoBehaviour
     private float deltaTime = 1;
     int x = 0;
     int y = 0;
+
+    float x_coef = 1;
+    float y_coef = 1;
     public GameObject fireCubePrefab;
 
     private GameObject[,] fireCubes;
+
+    public TextAsset heatValuesAsset;
     // Start is called before the first frame update
     void Start()
     {
+
         ParseData();
+        Debug.Log(x + " " + y);
         fireCubes = new GameObject[x,y];
         for (int i = 0; i < x; i++)
         {
             for (int j = 0; j < y; j++)
             {
-                fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i, 0, (float)j), Quaternion.identity);
+                fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i * 5 - 50, 2, (float)j * 5 - 50), Quaternion.identity);
             }
         }
     }
@@ -38,7 +45,7 @@ public class ReadHeatData : MonoBehaviour
         {
             for (int j = 0; j < y; j++)
             {
-                float temp = GetCurrentHeatDataPoint((float)i, 0, (float)j);
+                float temp = GetCurrentHeatDataPoint((float)i * 5 - 50, 0, (float)j * 5 - 50);
                 //Debug.Log(temp);
                 fireCubes[i, j].GetComponent<Renderer>().material.SetColor("_Color", new Color(temp/100f, 0f, 0f, 0.7f));
                 //Debug.Log(fireCubes[i, j].GetComponent<Renderer>().material.GetColor("_Color"));
@@ -49,13 +56,17 @@ public class ReadHeatData : MonoBehaviour
     void ParseData()
     {
         
-        TextAsset heatValuesAsset = Resources.Load("demofile2") as TextAsset;
+        //TextAsset heatValuesAsset = Resources.Load("demofile2") as TextAsset;
 
         string[] dataLines = heatValuesAsset.text.Split('\n');
         string[] dataDimensions = dataLines[0].Split(", ");
         int timestampCount = int.Parse(dataDimensions[0]);
         x = int.Parse(dataDimensions[1]);
         y = int.Parse(dataDimensions[2]);
+        string[] roomDimenstions = dataLines[1].Split(", ");
+        x_coef = (float)(x - 1) / int.Parse(roomDimenstions[0]);
+        y_coef = (float)(y - 1) / int.Parse(roomDimenstions[1]);
+        Debug.Log(x_coef +" "+ y_coef);
         string[] timestampsString = dataLines[2].Split(", ");
 
         heatValues = new float[timestampCount][,,];
@@ -88,7 +99,7 @@ public class ReadHeatData : MonoBehaviour
     }
     private int NormalizeX(float x)
     {
-        return Mathf.RoundToInt(x);
+        return Mathf.RoundToInt((x + 50) / 5f);
     }
     private int NormalizeY(float y)
     {
@@ -97,7 +108,7 @@ public class ReadHeatData : MonoBehaviour
     }
     private int NormalizeZ(float z)
     {
-        return Mathf.RoundToInt(z);
+        return Mathf.RoundToInt((z + 50) / 5f);
     }
 
     public float GetCurrentHeatDataPoint(float x, float y, float z)
@@ -107,10 +118,11 @@ public class ReadHeatData : MonoBehaviour
         {
             if(timestamps[i] < time && time < timestamps[i + 1])
             {
+                //Debug.Log(NormalizeX(x) + " " + NormalizeY(y) + " " + NormalizeZ(z));
+                //Debug.Log(heatValues[timestamps.Length - 1][NormalizeX(x), NormalizeY(y), NormalizeZ(z)]);
                 return heatValues[i][NormalizeX(x),NormalizeY(y),NormalizeZ(z)];
             }
         }
-        //Debug.Log(NormalizeX(x) + " " + NormalizeY(y) + " " + NormalizeZ(z));
         return heatValues[timestamps.Length - 1][NormalizeX(x), NormalizeY(y), NormalizeZ(z)];
     }
 }
