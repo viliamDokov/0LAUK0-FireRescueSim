@@ -16,7 +16,7 @@ public class LidarVisualizer : MonoBehaviour
     {
         if (Lidar != null)
         {
-            Lidar.LidarReadingEvent += HandleLidarReadings;
+            //Lidar.LidarReadingEvent += HandleLidarReadings;
         }
     }
 

@@ -11,7 +11,7 @@ public class ReadHeatData : MonoBehaviour
 
     // [t][x][y][z] where t is time and x, y, z are coordinates
     private float[][,,] heatValues;
-    private float deltaTime = 1;
+    // private float deltaTime = 1;
     int x = 0;
     int y = 0;
 
