@@ -63,59 +63,59 @@ public class LidarScan : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        ScanSegments(hectorSlam.MatchPose, out List<ScanSegment> scanSegments);
-        ScanCloud scanCloud = new ScanCloud()
-        {
-            Pose = System.Numerics.Vector3.Zero
-        };
+    // void Update()
+    // {
+    //     ScanSegments(hectorSlam.MatchPose, out List<ScanSegment> scanSegments);
+    //     ScanCloud scanCloud = new ScanCloud()
+    //     {
+    //         Pose = System.Numerics.Vector3.Zero
+    //     };
 
-        foreach (ScanSegment seg in scanSegments)
-        {
-            foreach (BaseSLAM.Ray ray in seg.Rays)
-            {
-                scanCloud.Points.Add(new System.Numerics.Vector2()
-                {
-                    X = ray.Radius * MathF.Cos(ray.Angle),
-                    Y = ray.Radius * MathF.Sin(ray.Angle),
-                });
-            }
-        }
+    //     foreach (ScanSegment seg in scanSegments)
+    //     {
+    //         foreach (BaseSLAM.Ray ray in seg.Rays)
+    //         {
+    //             scanCloud.Points.Add(new System.Numerics.Vector2()
+    //             {
+    //                 X = ray.Radius * MathF.Cos(ray.Angle),
+    //                 Y = ray.Radius * MathF.Sin(ray.Angle),
+    //             });
+    //         }
+    //     }
 
-        hectorSlam.Update(scanCloud, hectorSlam.MatchPose, loops < 10);
-        loops++;
-    }
+    //     hectorSlam.Update(scanCloud, hectorSlam.MatchPose, loops < 10);
+    //     loops++;
+    // }
 
-    private void ScanSegments(System.Numerics.Vector3 estimatedPose, out List<ScanSegment> segments)
-    {
-        ScanSegment scanSegment = new ScanSegment()
-        {
-            Pose = estimatedPose,
-            IsLast = true
-        };
+    // private void ScanSegments(System.Numerics.Vector3 estimatedPose, out List<ScanSegment> segments)
+    // {
+    //     ScanSegment scanSegment = new ScanSegment()
+    //     {
+    //         Pose = estimatedPose,
+    //         IsLast = true
+    //     };
 
-        for (float angle = 0f; angle < Mathf.PI * 2; angle += LidarStep)
-        {
-            float lidarAngle = angle + transform.rotation.eulerAngles.y; // Is the addition relevant?
-            Vector3 direction = new Vector3(Mathf.Sin(lidarAngle), 0, Mathf.Cos(lidarAngle));
+    //     for (float angle = 0f; angle < Mathf.PI * 2; angle += LidarStep)
+    //     {
+    //         float lidarAngle = angle + transform.rotation.eulerAngles.y; // Is the addition relevant?
+    //         Vector3 direction = new Vector3(Mathf.Sin(lidarAngle), 0, Mathf.Cos(lidarAngle));
 
-            RaycastHit hit;
-            if (Physics.Raycast(
-                origin: transform.position,
-                direction: transform.TransformDirection(direction),
-                hitInfo: out hit,
-                maxDistance: 100,
-                layerMask: TargetLayers)
-            )
-            {
-                scanSegment.Rays.Add(new BaseSLAM.Ray(angle, hit.distance));
-            }
-        }
+    //         RaycastHit hit;
+    //         if (Physics.Raycast(
+    //             origin: transform.position,
+    //             direction: transform.TransformDirection(direction),
+    //             hitInfo: out hit,
+    //             maxDistance: 100,
+    //             layerMask: TargetLayers)
+    //         )
+    //         {
+    //             scanSegment.Rays.Add(new BaseSLAM.Ray(angle, hit.distance));
+    //         }
+    //     }
 
-        segments = new List<ScanSegment>()
-        {
-            scanSegment
-        };
-    }
+    //     segments = new List<ScanSegment>()
+    //     {
+    //         scanSegment
+    //     };
+    // }
 }
