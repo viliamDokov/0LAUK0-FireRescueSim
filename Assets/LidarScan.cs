@@ -1,6 +1,5 @@
 using BaseSLAM;
 using CoreSLAM;
-using HectorSLAM.Main;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,8 +32,15 @@ public class LidarScan : MonoBehaviour
     // private float 
 
     // public event Action<List<LidarReading>> LidarReadingEvent;
-    private HectorSLAMProcessor hectorSlam;
     private int loops = 0;
+
+    public CoreSLAMProcessor SLAMProcessor;
+    public ushort[] MapData
+    {
+        get => SLAMProcessor?.HoleMap.Pixels;
+    }
+
+    public int MapSize = 256;
 
     // Start is called before the first frame update
     void Start()
@@ -42,27 +48,17 @@ public class LidarScan : MonoBehaviour
         RobotLayer = 1 << LayerMask.NameToLayer("Robot");
         TargetLayers = ~RobotLayer;
         LidarStep = Mathf.PI*2 / NLidarRays;
+        
 
-
-        var startPose = new System.Numerics.Vector3(20.0f, 20.0f, 0.0f);
-
-        // HectorSLAM
-        int hsMapSide = 400;
-        hectorSlam = new HectorSLAMProcessor(40.0f / hsMapSide, new System.Drawing.Point(hsMapSide, hsMapSide), startPose, 4, 4)
+        var startPose = new System.Numerics.Vector3(100.0f, 100.0f, 0.0f);
+        SLAMProcessor = new CoreSLAMProcessor(200.0f, MapSize, 64, startPose, 0.1f, MathEx.DegToRad(10), 1000, 4)
         {
-            MinDistanceDiffForMapUpdate = 0.4f,
-            MinAngleDiffForMapUpdate = MathEx.DegToRad(8)
+            HoleWidth = 2.0f
         };
-
-        // Set estimate iteransions counts for each map layer
-        hectorSlam.MapRep.Maps[0].EstimateIterations = 7;
-        hectorSlam.MapRep.Maps[1].EstimateIterations = 4;
-        hectorSlam.MapRep.Maps[2].EstimateIterations = 4;
-        hectorSlam.MapRep.Maps[3].EstimateIterations = 4;
-
     }
 
     // Update is called once per frame
+<<<<<<< HEAD
     // void Update()
     // {
     //     ScanSegments(hectorSlam.MatchPose, out List<ScanSegment> scanSegments);
@@ -86,6 +82,17 @@ public class LidarScan : MonoBehaviour
     //     hectorSlam.Update(scanCloud, hectorSlam.MatchPose, loops < 10);
     //     loops++;
     // }
+=======
+    void Update()
+    {
+        ScanSegments(SLAMProcessor.Pose, out List<ScanSegment> segments);
+        SLAMProcessor.Update(segments);
+        for(int i = 0; i < 10; i++)
+        {
+            Debug.Log(SLAMProcessor.HoleMap.Pixels[i]);
+        }
+    }
+>>>>>>> 7f019f6 (First iteration of SLAM)
 
     // private void ScanSegments(System.Numerics.Vector3 estimatedPose, out List<ScanSegment> segments)
     // {
@@ -95,10 +102,17 @@ public class LidarScan : MonoBehaviour
     //         IsLast = true
     //     };
 
+<<<<<<< HEAD
     //     for (float angle = 0f; angle < Mathf.PI * 2; angle += LidarStep)
     //     {
     //         float lidarAngle = angle + transform.rotation.eulerAngles.y; // Is the addition relevant?
     //         Vector3 direction = new Vector3(Mathf.Sin(lidarAngle), 0, Mathf.Cos(lidarAngle));
+=======
+        for (float angle = 0f; angle < Mathf.PI * 2; angle += LidarStep)
+        {
+            float lidarAngle = angle; // Is the addition relevant?
+            Vector3 direction = new Vector3(Mathf.Sin(lidarAngle), 0, Mathf.Cos(lidarAngle));
+>>>>>>> 7f019f6 (First iteration of SLAM)
 
     //         RaycastHit hit;
     //         if (Physics.Raycast(
