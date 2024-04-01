@@ -2141,7 +2141,7 @@ RectTransform:
   m_GameObject: {fileID: 826135708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1281992183}
@@ -2202,7 +2202,7 @@ MonoBehaviour:
   color: {r: 0, g: 1, b: 1, a: 1}
   Lidar: {fileID: 2037936293}
   heatData: {fileID: 631671180}
-  fireScaler: 12
+  fireScaler: 5
 --- !u!1 &833989614
 GameObject:
   m_ObjectHideFlags: 0
@@ -4972,7 +4972,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1980575972950110290, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -40.8
+      value: 31.3
       objectReference: {fileID: 0}
     - target: {fileID: 1980575972950110290, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5030,6 +5030,10 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5452603311947500270, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: m_Motor.force
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 6941074834222528398, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: minimap
       value: 
@@ -5044,7 +5048,11 @@ PrefabInstance:
       objectReference: {fileID: 631671179}
     - target: {fileID: 7028003039720994968, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: m_Mass
-      value: 4
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431422771397916864, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: m_Motor.force
+      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3701023723900650617, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}

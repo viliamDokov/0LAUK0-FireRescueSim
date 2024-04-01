@@ -1,6 +1,7 @@
 using CoreSLAM;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ public class LidarDrawer : MonoBehaviour
     private int heatMapX;
     private int heatMapZ;
     public ReadHeatData heatData;
-    public int fireScaler = 12;
+    public int fireScaler = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -27,11 +28,13 @@ public class LidarDrawer : MonoBehaviour
         Size = Lidar.MapSize;
         texture = new Texture2D(Size, Size);
         targetImage.texture = texture;
-        int[] dimensions = heatData.GetDimensions();
-        heatMapX = dimensions[0] * fireScaler;
-        heatMapZ = dimensions[1] * fireScaler;
-        Debug.Log(dimensions[0] + " " +  dimensions[1]);
-        heatMap = new float[dimensions[0] * fireScaler, dimensions[1]  * fireScaler];
+        Vector2 dimensions = texture.Size();
+        //int[] dimensions = heatData.GetDimensions();
+        //heatMapX = dimensions[0] * fireScaler;
+        //heatMapZ = dimensions[1] * fireScaler;
+        //Debug.Log(dimensions[0] + " " +  dimensions[1]);
+        //heatMap = new float[dimensions[0] * fireScaler, dimensions[1]  * fireScaler];
+        heatMap = new float[(int)dimensions.x, (int)dimensions.y];
     }
 
     // Update is called once per frame
@@ -56,6 +59,10 @@ public class LidarDrawer : MonoBehaviour
                 {
                     color = Color.green;
                 }
+                else if (heatMap[x, y] > 0)
+                {
+                    color = new Color(heatMap[x, y] / 100f, 0, 0, 1);
+                }
                 else
                 {
                     ushort alpha = GrayValues[x + Size * y];
@@ -67,34 +74,26 @@ public class LidarDrawer : MonoBehaviour
                 texture.SetPixel(Size - x, y, color);
             }
         }
-
-        for (int x = 0; x < heatMapX; x++)
-        {
-            for (int y = 0; y < heatMapZ; y++)
-            {
-                if (heatMap[x,y] > 0)
-                {
-                    texture.SetPixel(x, y, new Color(heatMap[x, y] / 100f, 0, 0, 1));
-                }
-            }
-        }
         texture.Apply();
     }
 
-    public void updateHeatData(float x, float z)
+    public void updateHeatData(float x, float y)
     {
-        int normalizedX = heatData.NormalizeX(x);
-        int normalizedZ = heatData.NormalizeZ(z);
-        Debug.Log(x + " " + z);
-        Debug.Log(normalizedX + " " + normalizedZ);
-        float temp = heatData.GetCurrentHeatDataPoint(x, 0, z);
+        //int normalizedX = heatData.NormalizeX(x);
+        //int normalizedZ = heatData.NormalizeZ(y);
+
+        var mapPoseHeat = Lidar.WorldPoseToMapPose(new Vector3(x, 0, y));
+        int mapPoseX = Mathf.RoundToInt(mapPoseHeat.X);
+        int mapPoseY = Mathf.RoundToInt(mapPoseHeat.Y);
+
+        float temp = heatData.GetCurrentHeatDataPoint(x, 0, y);
         Debug.Log(temp);
 
-        for (int i = 0; i < fireScaler * 2; i++)
+        for (int i = -fireScaler; i < fireScaler + 1; i++)
         {
-            for (int j = 0; j < fireScaler * 2; j++)
+            for (int j = -fireScaler; j < fireScaler + 1; j++)
             {
-                heatMap[normalizedX * fireScaler + i, normalizedZ * fireScaler + j] = temp;
+                heatMap[mapPoseX + i, mapPoseY + j] = Mathf.Max(heatMap[mapPoseX + i, mapPoseY + j], temp * (1 - ( fireScaler + i) / (4 * fireScaler) ) );
             }
         }
 
