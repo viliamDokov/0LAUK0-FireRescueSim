@@ -25,16 +25,33 @@ public class LidarDrawer : MonoBehaviour
     void Update()
     {
         ushort[] GrayValues = Lidar.MapData;
+        var mapPose = Lidar.WorldPoseToMapPose(Lidar.transform.position);
+        var estimatedPose = Lidar.SLAMProcessor.Pose;
+        estimatedPose = estimatedPose * Lidar.SLAMProcessor.HoleMap.Scale;
+        Debug.Log($"ESTIMADE: {estimatedPose.X} {estimatedPose.Y }");
 
         for (int x = 0; x < texture.width; x++)
         {
             for(int y = 0; y < texture.height;y++)
             {
+                Color color;
+                if( Mathf.Abs(x - mapPose.X) < 2 && Mathf.Abs(y - mapPose.Y) < 2)
+                {
+                    color = Color.red;
+                } 
+                else if (Mathf.Abs(x - estimatedPose.X) < 2 && Mathf.Abs(y - estimatedPose.Y) < 2)
+                {
+                    color = Color.green;
+                }
+                else
+                {
+                    ushort alpha = GrayValues[x + Size * y];
+                    byte alphaByte = (byte)(alpha >> 8);
+                    color = new Color32(255, 255, 255, alphaByte);
+                }
 
-                ushort alpha = GrayValues[x + Size * y];
-                byte alphaByte= (byte)(alpha>>8);
                 
-                texture.SetPixel(x, y,new Color32(255,255,255, alphaByte));
+                texture.SetPixel(Size - x, y, color);
             }
         }
         texture.Apply();
