@@ -10,12 +10,13 @@ public class MoveWheels : MonoBehaviour
     private HingeJoint RightWheelJoint; 
     private HingeJoint LeftWheelJoint;
     private Transform body;
-
+    private Transform heatSensor;
     public GameObject minimap;
 
     // Start is called before the first frame update
     void Start()
     {
+        heatSensor = gameObject.transform.Find("Cube");
         body = transform.Find("Cube");
         int nChildren = gameObject.transform.childCount;
         for(int i = 0; i < nChildren; i++){
@@ -35,6 +36,15 @@ public class MoveWheels : MonoBehaviour
         float forwardInput = Input.GetAxis("Vertical");
         float leftrightInput = Input.GetAxis("Horizontal");
 
+        if (forwardInput < 1f && forwardInput > -1f) {
+            forwardInput = 0f;
+        }
+
+        if (leftrightInput < 1f && leftrightInput > -1f)
+        {
+            leftrightInput = 0f;
+        }
+
         var LeftMotor = LeftWheelJoint.motor;
         LeftMotor.targetVelocity = speedScale * forwardInput - speedScale * leftrightInput;
         LeftWheelJoint.motor = LeftMotor;
@@ -45,29 +55,10 @@ public class MoveWheels : MonoBehaviour
 
         //Debug.Log($"({LeftMotor.targetVelocity} {RightMotor.targetVelocity})");
         //Debug.Log($"({forwardInput} {leftrightInput})");
-        Transform sensor = gameObject.transform.Find("Cube");
-        //Debug.Log(Time.time);
-        Debug.Log(sensor.position.x + " " + sensor.position.z);
-        Debug.Log(gameObject.GetComponent<ReadHeatData>().NormalizeX(sensor.position.x) + " " + gameObject.GetComponent<ReadHeatData>().NormalizeZ(sensor.position.z));
-        float temp = gameObject.GetComponent<ReadHeatData>().GetCurrentHeatDataPoint(sensor.position.x, 0, sensor.position.z);
-        Debug.Log(temp);
-        SetFireColor(temp);
-    }
-
-
-    private void SetFireColor(float temp)
-    {
-        int x = (int)body.position.x;
-        int y = (int)body.position.z;
-        for (int i = -1; i < 2; i++)
-        {
-            for (int j = -1; j < 2; j++)
-            {
-                minimap.GetComponent<MinimapDrawer>().Paint(x + i, y + j, new Color(temp / 100f, 0, 0));
-            }
-        }
         
+        minimap.GetComponent<LidarDrawer>().updateHeatData(heatSensor.position.x, heatSensor.position.z);
     }
+
 
     private void SetJointSpeed(HingeJoint joint, float speed) {
         JointMotor motor = joint.motor;

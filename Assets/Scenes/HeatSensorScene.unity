@@ -334,52 +334,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &583984545
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 583984546}
-  - component: {fileID: 583984547}
-  m_Layer: 0
-  m_Name: GameController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &583984546
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583984545}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -73.498566, y: -54.88566, z: -12.257582}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &583984547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583984545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b056744e6ea135409afe7a6eaf8f42b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireCubePrefab: {fileID: 5305428867940792504, guid: c02fdf0e144c6f840979c972b8d9263f, type: 3}
-  heatValuesAsset: {fileID: 4900000, guid: 960da7109b2c1174382be0e04667523e, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,10 +497,34 @@ PrefabInstance:
       propertyPath: minimap
       value: 
       objectReference: {fileID: 939418407}
+    - target: {fileID: 2358467146094859013, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3178235585181175570, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: m_Name
       value: Robot
       objectReference: {fileID: 0}
+    - target: {fileID: 3441147275738258967, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: x_coef
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3441147275738258967, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: y_coef
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3441147275738258967, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: x_const
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3441147275738258967, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: y_const
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3441147275738258967, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: heatValuesAsset
+      value: 
+      objectReference: {fileID: 4900000, guid: 4fffb5708295a694fa13285d9d9e53ce, type: 3}
     - target: {fileID: 6941074834222528398, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: minimap
       value: 
@@ -558,7 +536,11 @@ PrefabInstance:
     - target: {fileID: 6941074834222528398, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: gameController
       value: 
-      objectReference: {fileID: 583984545}
+      objectReference: {fileID: 0}
+    - target: {fileID: 8719756550191569592, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -682,8 +664,12 @@ PrefabInstance:
       value: MinimapStuff 1
       objectReference: {fileID: 0}
     - target: {fileID: 2425233016228877256, guid: e83020c8a5e14f64f8350066387460dd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2425233016228877256, guid: e83020c8a5e14f64f8350066387460dd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6509855159740372344, guid: e83020c8a5e14f64f8350066387460dd, type: 3}
       propertyPath: m_Camera
@@ -820,6 +806,5 @@ SceneRoots:
   - {fileID: 941842995}
   - {fileID: 368539440}
   - {fileID: 1347965149}
-  - {fileID: 583984546}
   - {fileID: 5073159392632218104}
   - {fileID: 1699089161}

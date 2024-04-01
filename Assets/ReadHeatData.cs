@@ -143,4 +143,9 @@ public class ReadHeatData : MonoBehaviour
         }
         return heatValues[timestamps.Length - 1][NormalizeX(x), NormalizeY(y), NormalizeZ(z)];
     }
+
+    public int[] GetDimensions()
+    {
+        return new int[] { x, y };
+    }
 }

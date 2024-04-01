@@ -69,10 +69,10 @@ public class LidarScan : MonoBehaviour
     {
         ScanSegments(SLAMProcessor.Pose, out List<ScanSegment> segments);
         SLAMProcessor.Update(segments);
-        for(int i = 0; i < 10; i++)
-        {
-            Debug.Log(SLAMProcessor.HoleMap.Pixels[i]);
-        }
+        //for(int i = 0; i < 10; i++)
+        //{
+        //    Debug.Log(SLAMProcessor.HoleMap.Pixels[i]);
+        //}
     }
 
      private void ScanSegments(System.Numerics.Vector3 estimatedPose, out List<ScanSegment> segments)
