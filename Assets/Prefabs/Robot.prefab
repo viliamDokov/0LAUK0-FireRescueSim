@@ -663,6 +663,7 @@ Transform:
   - {fileID: 6327904469373117510}
   - {fileID: 6943316216772783828}
   - {fileID: 6694836015650903434}
+  - {fileID: 3645164073240363983}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6941074834222528398
@@ -886,7 +887,6 @@ GameObject:
   - component: {fileID: 5411261306830086531}
   - component: {fileID: 4458981492623655077}
   - component: {fileID: 8719756550191569592}
-  - component: {fileID: 2358467146094859013}
   m_Layer: 6
   m_Name: Lidar
   m_TagString: Untagged
@@ -1014,17 +1014,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NLidarRays: 90
---- !u!114 &2358467146094859013
+--- !u!1 &6664200183439546461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3645164073240363983}
+  - component: {fileID: 7942493502858823823}
+  m_Layer: 0
+  m_Name: Slam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3645164073240363983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6664200183439546461}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.4000001, y: 0.90000004, z: 0}
+  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1980575972950110290}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7942493502858823823
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5209561368315422401}
+  m_GameObject: {fileID: 6664200183439546461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 270a71fdfdbd8b6418b18ea355d39c29, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f808b9afefa2d349820d9cf839fc5b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Lidar: {fileID: 8719756550191569592}
-  minimap: {fileID: 0}
+  lidar: {fileID: 8719756550191569592}

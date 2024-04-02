@@ -1,5 +1,6 @@
 using BaseSLAM;
 using CoreSLAM;
+using HectorSLAM.Main;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,6 @@ public struct LidarReading {
     }
 }
 
-
 public class LidarScan : MonoBehaviour
 {
     // The collision layer of the robot  
@@ -31,18 +31,8 @@ public class LidarScan : MonoBehaviour
     private float LidarStep;
     // private float 
 
-    // public event Action<List<LidarReading>> LidarReadingEvent;
-    private int loops = 0;
-
-    public CoreSLAMProcessor SLAMProcessor;
-    public ushort[] MapData
-    {
-        get => SLAMProcessor?.HoleMap.Pixels;
-    }
-
-    public int MapSize = 350;
-    public System.Numerics.Vector3 mapStartPose = new System.Numerics.Vector3(100.0f, 100.0f, 0.0f);
-    public Vector3 worldStartPose;
+    public delegate void ReadingHandler(List<BaseSLAM.Ray> cloud);
+    public event ReadingHandler ProcessData;
 
     // Start is called before the first frame update
     void Start()
@@ -50,39 +40,59 @@ public class LidarScan : MonoBehaviour
         RobotLayer = 1 << LayerMask.NameToLayer("Robot");
         TargetLayers = ~RobotLayer;
         LidarStep = Mathf.PI*2 / NLidarRays;
-        worldStartPose = transform.position;
-
-        SLAMProcessor = new CoreSLAMProcessor(200.0f, MapSize, 64, mapStartPose, 0.1f, MathEx.DegToRad(10), 1000, 4)
-        {
-            HoleWidth = 2.0f
-        };
     }
 
-    public System.Numerics.Vector3 WorldPoseToMapPose(Vector3 worldPose)
-    {
-        worldPose = worldPose - worldStartPose;
-        var pixelsPerMeter = SLAMProcessor.HoleMap.Scale; 
-        return new System.Numerics.Vector3((mapStartPose.X - worldPose.x )* pixelsPerMeter, (mapStartPose.Y + worldPose.z) * pixelsPerMeter, 0);
-    }
 
     void Update()
     {
-        ScanSegments(SLAMProcessor.Pose, out List<ScanSegment> segments);
-        SLAMProcessor.Update(segments);
-        //for(int i = 0; i < 10; i++)
-        //{
-        //    Debug.Log(SLAMProcessor.HoleMap.Pixels[i]);
-        //}
+        ScanSegments(out List<BaseSLAM.Ray> segments);
+        if (ProcessData != null) {
+            ProcessData(segments);
+        }
     }
 
-     private void ScanSegments(System.Numerics.Vector3 estimatedPose, out List<ScanSegment> segments)
-    {
-        ScanSegment scanSegment = new ScanSegment()
-        {
-            Pose = estimatedPose,
-            IsLast = true
-        };
 
+    //private HectorSLAMProcessor SetupHecoeSlam()
+    //{
+    //    var result = new HectorSLAMProcessor(RealMapSize / hsMapSize, new System.Drawing.Point(hsMapSize, hsMapSize), hsMapStartPose, 4, 4)
+    //    {
+    //        MinDistanceDiffForMapUpdate = 0.4f,
+    //        MinAngleDiffForMapUpdate = MathEx.DegToRad(8)
+    //    };
+
+    //    result.MapRep.Maps[0].EstimateIterations = 7;
+    //    result.MapRep.Maps[1].EstimateIterations = 4;
+    //    result.MapRep.Maps[2].EstimateIterations = 4;
+    //    result.MapRep.Maps[3].EstimateIterations = 4;
+
+    //    return result;
+    //}
+
+    //private ScanCloud SegmentsToCloud(List<ScanSegment> segments)
+    //{
+    //    ScanCloud scanCloud = new ScanCloud()
+    //    {
+    //        Pose = System.Numerics.Vector3.Zero
+    //    };
+
+    //    foreach (ScanSegment seg in segments)
+    //    {
+    //        foreach (BaseSLAM.Ray ray in seg.Rays)
+    //        {
+    //            scanCloud.Points.Add(new System.Numerics.Vector2()
+    //            {
+    //                X = ray.Radius * MathF.Cos(ray.Angle),
+    //                Y = ray.Radius * MathF.Sin(ray.Angle),
+    //            });
+    //        }
+    //    }
+
+    //    return scanCloud;
+    //}
+
+     private void ScanSegments(out List<BaseSLAM.Ray> rays)
+    {
+        rays = new();
 
         for (float angle = 0f; angle < Mathf.PI * 2; angle += LidarStep)
         {
@@ -97,13 +107,8 @@ public class LidarScan : MonoBehaviour
                 layerMask: TargetLayers)
             )
             {
-                scanSegment.Rays.Add(new BaseSLAM.Ray(angle, hit.distance));
+                rays.Add(new BaseSLAM.Ray(angle, hit.distance));
             }
         }
-
-        segments = new List<ScanSegment>()
-             {
-                 scanSegment
-             };
     }
 }

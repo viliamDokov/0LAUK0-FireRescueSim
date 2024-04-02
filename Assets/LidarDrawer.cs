@@ -13,8 +13,9 @@ public class LidarDrawer : MonoBehaviour
     private Texture2D texture;
     private int Size = 100;
     public Color color = Color.cyan;
-    public LidarScan Lidar;
-    private CoreSLAMProcessor SLAMProcessor;
+    public BaseSlamScript baseSlam;
+    private ISlamComponent slam;
+    public Transform RobotPosition;
 
     private float[,] heatMap;
     private int heatMapX;
@@ -25,7 +26,8 @@ public class LidarDrawer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Size = Lidar.MapSize;
+        slam = baseSlam;
+        Size = slam.SlamMapSize;
         texture = new Texture2D(Size, Size);
         targetImage.texture = texture;
         Vector2 dimensions = texture.Size();
@@ -40,12 +42,12 @@ public class LidarDrawer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ushort[] GrayValues = Lidar.MapData;
-        var mapPose = Lidar.WorldPoseToMapPose(Lidar.transform.position);
-        var estimatedPose = Lidar.SLAMProcessor.Pose;
-        estimatedPose = estimatedPose * Lidar.SLAMProcessor.HoleMap.Scale;
-        //Debug.Log($"ESTIMADE: {estimatedPose.X} {estimatedPose.Y }");
+        byte[] GrayValues = slam.MapData;
+        var mapPose = slam.WorldPoseToMapPose(RobotPosition.position);
+        var estimatedPose = slam.EstimatedPose;
+        estimatedPose = estimatedPose * slam.scale;
 
+        //Debug.Log($"ESTIMADE: {estimatedPose.X} {estimatedPose.Y }");
         for (int x = 0; x < texture.width; x++)
         {
             for(int y = 0; y < texture.height;y++)
@@ -65,9 +67,8 @@ public class LidarDrawer : MonoBehaviour
                 }
                 else
                 {
-                    ushort alpha = GrayValues[x + Size * y];
-                    byte alphaByte = (byte)(alpha >> 8);
-                    color = new Color32(255, 255, 255, alphaByte);
+                    byte alpha = GrayValues[x + Size * y];
+                    color = new Color32(255, 255, 255, alpha);
                 }
 
                 
@@ -82,7 +83,7 @@ public class LidarDrawer : MonoBehaviour
         //int normalizedX = heatData.NormalizeX(x);
         //int normalizedZ = heatData.NormalizeZ(y);
 
-        var mapPoseHeat = Lidar.WorldPoseToMapPose(new Vector3(x, 0, y));
+        var mapPoseHeat = slam.EstimatedPose * slam.scale;
         int mapPoseX = Mathf.RoundToInt(mapPoseHeat.X);
         int mapPoseY = Mathf.RoundToInt(mapPoseHeat.Y);
 
