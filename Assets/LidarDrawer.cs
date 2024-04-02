@@ -14,6 +14,7 @@ public class LidarDrawer : MonoBehaviour
     private int Size = 100;
     public Color color = Color.cyan;
     public BaseSlamScript baseSlam;
+    public HectorSlamScript hectorSlam;
     private ISlamComponent slam;
     public Transform RobotPosition;
 
@@ -46,14 +47,19 @@ public class LidarDrawer : MonoBehaviour
         var mapPose = slam.WorldPoseToMapPose(RobotPosition.position);
         var estimatedPose = slam.EstimatedPose;
         estimatedPose = estimatedPose * slam.scale;
+        Debug.Log($"POSATO {mapPose.X} {mapPose.Y}");
 
-        //Debug.Log($"ESTIMADE: {estimatedPose.X} {estimatedPose.Y }");
+        Debug.Log($"ESTIMADE: {texture.width} {texture.height }");
         for (int x = 0; x < texture.width; x++)
         {
             for(int y = 0; y < texture.height;y++)
             {
                 Color color;
-                if( Mathf.Abs(x - mapPose.X) < 2 && Mathf.Abs(y - mapPose.Y) < 2)
+                if (x < 10 && y < 10)
+                {
+                    color = Color.cyan;
+                }
+                else if( Mathf.Abs(x - mapPose.X) < 2 && Mathf.Abs(y - mapPose.Y) < 2)
                 {
                     color = Color.red;
                 } 
@@ -94,7 +100,9 @@ public class LidarDrawer : MonoBehaviour
         {
             for (int j = -fireScaler; j < fireScaler + 1; j++)
             {
-                heatMap[mapPoseX + i, mapPoseY + j] = Mathf.Max(heatMap[mapPoseX + i, mapPoseY + j], temp * (1 - ( fireScaler + i) / (2 * fireScaler) ) );
+                var xIdx = Mathf.Clamp(mapPoseX + i, 0, heatMap.GetLength(0)-1); 
+                var yIdx = Mathf.Clamp(mapPoseY + j, 0, heatMap.GetLength(1)-1);
+                heatMap[xIdx, yIdx] = Mathf.Max(heatMap[xIdx, yIdx], temp * (1 - ( fireScaler + i) / (2 * fireScaler) ) );
             }
         }
 

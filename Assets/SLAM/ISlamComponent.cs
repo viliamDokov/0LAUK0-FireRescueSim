@@ -23,6 +23,7 @@ public interface ISlamComponent
     public System.Numerics.Vector3 WorldPoseToMapPose(Vector3 worldPose)
     {
         worldPose = worldPose - WorldStartPose;
+        Debug.Log($"DiffFromStart{worldPose} {scale}");
         return new System.Numerics.Vector3((MapStartPose.X - worldPose.x) * scale, (MapStartPose.Y + worldPose.z) * scale, 0);
     }
 
