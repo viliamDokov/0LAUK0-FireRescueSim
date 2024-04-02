@@ -44,7 +44,7 @@ public class LidarDrawer : MonoBehaviour
         var mapPose = Lidar.WorldPoseToMapPose(Lidar.transform.position);
         var estimatedPose = Lidar.SLAMProcessor.Pose;
         estimatedPose = estimatedPose * Lidar.SLAMProcessor.HoleMap.Scale;
-        Debug.Log($"ESTIMADE: {estimatedPose.X} {estimatedPose.Y }");
+        //Debug.Log($"ESTIMADE: {estimatedPose.X} {estimatedPose.Y }");
 
         for (int x = 0; x < texture.width; x++)
         {
@@ -87,13 +87,13 @@ public class LidarDrawer : MonoBehaviour
         int mapPoseY = Mathf.RoundToInt(mapPoseHeat.Y);
 
         float temp = heatData.GetCurrentHeatDataPoint(x, 0, y);
-        Debug.Log(temp);
+        //Debug.Log(temp);
 
         for (int i = -fireScaler; i < fireScaler + 1; i++)
         {
             for (int j = -fireScaler; j < fireScaler + 1; j++)
             {
-                heatMap[mapPoseX + i, mapPoseY + j] = Mathf.Max(heatMap[mapPoseX + i, mapPoseY + j], temp * (1 - ( fireScaler + i) / (4 * fireScaler) ) );
+                heatMap[mapPoseX + i, mapPoseY + j] = Mathf.Max(heatMap[mapPoseX + i, mapPoseY + j], temp * (1 - ( fireScaler + i) / (2 * fireScaler) ) );
             }
         }
 

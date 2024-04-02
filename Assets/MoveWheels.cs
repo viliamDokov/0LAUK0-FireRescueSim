@@ -33,8 +33,8 @@ public class MoveWheels : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float forwardInput = Input.GetAxis("Vertical");
-        float leftrightInput = Input.GetAxis("Horizontal");
+        float forwardInput = Input.GetAxisRaw("Vertical");
+        float leftrightInput = Input.GetAxisRaw("Horizontal");
 
         if (forwardInput < 1f && forwardInput > -1f) {
             forwardInput = 0f;
@@ -43,6 +43,16 @@ public class MoveWheels : MonoBehaviour
         if (leftrightInput < 1f && leftrightInput > -1f)
         {
             leftrightInput = 0f;
+            float angVelocity = body.GetComponent<Rigidbody>().angularVelocity.y;
+            float newAngVelocity;
+            if (angVelocity > 0f)
+            {
+                newAngVelocity = Mathf.Max(0f, angVelocity - 0.2f);
+            } else
+            {
+                newAngVelocity = Mathf.Min(0f, angVelocity + 0.2f);
+            }
+            body.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, newAngVelocity, 0);
         }
 
         var LeftMotor = LeftWheelJoint.motor;
@@ -53,9 +63,20 @@ public class MoveWheels : MonoBehaviour
         RightMotor.targetVelocity = speedScale * forwardInput + speedScale * leftrightInput;
         RightWheelJoint.motor = RightMotor;
 
-        //Debug.Log($"({LeftMotor.targetVelocity} {RightMotor.targetVelocity})");
+        //if( forwardInput == 0f && leftrightInput == 0f)
+        //{
+        //    body.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //    LeftMotor.force = 0;
+        //    RightMotor.force = 0;
+        //}
+
+        Debug.Log(body.GetComponent<Rigidbody>().angularVelocity);
+        //Debug.Log(body.GetComponent<Rigidbody>().velocity);
+        //Debug.Log(body.GetComponent<Rigidbody>().);
+        Debug.Log($"({LeftMotor.targetVelocity} {RightMotor.targetVelocity})");
+        Debug.Log($"({LeftMotor.force} {RightMotor.force})");
         //Debug.Log($"({forwardInput} {leftrightInput})");
-        
+
         minimap.GetComponent<LidarDrawer>().updateHeatData(heatSensor.position.x, heatSensor.position.z);
     }
 

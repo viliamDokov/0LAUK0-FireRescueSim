@@ -85,8 +85,8 @@ public class ReadHeatData : MonoBehaviour
 
         heatValues = new float[timestampCount][,,];
         timestamps = new float[timestampCount];
-        Debug.Log(timestampCount);
-        Debug.Log(x + " " +  y);
+        //Debug.Log(timestampCount);
+        //Debug.Log(x + " " +  y);
         for (int j = 0; j < timestampCount; j++)
         {
             //Debug.Log(timestampsString[j]);

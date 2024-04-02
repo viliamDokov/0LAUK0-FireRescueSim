@@ -525,17 +525,29 @@ PrefabInstance:
       propertyPath: heatValuesAsset
       value: 
       objectReference: {fileID: 4900000, guid: 4fffb5708295a694fa13285d9d9e53ce, type: 3}
+    - target: {fileID: 5452603311947500270, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: m_Motor.force
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 6941074834222528398, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: minimap
       value: 
       objectReference: {fileID: 939418407}
     - target: {fileID: 6941074834222528398, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: speedScale
-      value: 400
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6941074834222528398, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: gameController
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7028003039720994968, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: m_Mass
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431422771397916864, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
+      propertyPath: m_Motor.force
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8719756550191569592, guid: b1502b381ca3d1e4bad49ff91511c90c, type: 3}
       propertyPath: m_Enabled
