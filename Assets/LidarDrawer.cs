@@ -102,7 +102,7 @@ public class LidarDrawer : MonoBehaviour
             {
                 var xIdx = Mathf.Clamp(mapPoseX + i, 0, heatMap.GetLength(0)-1); 
                 var yIdx = Mathf.Clamp(mapPoseY + j, 0, heatMap.GetLength(1)-1);
-                heatMap[xIdx, yIdx] = Mathf.Max(heatMap[xIdx, yIdx], temp * (1 - ( fireScaler + i) / (2 * fireScaler) ) );
+                heatMap[xIdx, yIdx] = temp * (1 - ( fireScaler + i) / (2 * fireScaler));
             }
         }
 
