@@ -2,6 +2,7 @@ using CoreSLAM;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -53,9 +54,12 @@ public class LidarDrawer : MonoBehaviour
     public RawImage heatScaleImage;
     private Texture2D heatScaleTexture;
 
+
+
     public int heatScaleWidth = 30;
     public int heatScaleHeigth= 100;
 
+    public TextMeshProUGUI TempDisplay;
     // Start is called before the first frame update
     void Start()
     {
@@ -173,6 +177,7 @@ public class LidarDrawer : MonoBehaviour
         int mapPoseY = Mathf.RoundToInt(mapPoseHeat.Y);
 
         float temp = heatData.GetCurrentHeatDataPoint(x, y);
+        TempDisplay.text = $"Temp: {temp:0.} °C";
         Debug.Log($"HEATMAP: {heatMap.GetLength(0)}");
 
         for (int i = -fireRadius; i < fireRadius + 1; i++)

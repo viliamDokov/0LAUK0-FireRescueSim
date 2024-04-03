@@ -25,7 +25,7 @@ public class ScaleDrawe : MonoBehaviour
         {
             var label = Instantiate(LabelPrefab, transform);
             label.alignment = TextAlignmentOptions.MidlineLeft;
-            label.text = $"{value:0.## °C}";
+            label.text = $"{value:0.#} °C";
             Labels.Add(label);
 
             value -= STEP_SIZE;
