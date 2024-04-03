@@ -3,15 +3,10 @@
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
-struct HeatData
-{
-    float temp;
-    float time;
-};
+
 
 RWTexture2D<float4> Result;
 StructuredBuffer<int> MapData;
-StructuredBuffer<HeatData> HeatMap;
 float Resolution;
 
 int RobotX;
@@ -27,13 +22,15 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     int y = id.y;
     float val = MapData[Resolution-id.x + id.y * Resolution] / (255);
     
-    if (((RobotX - x <= SQUARE_SIZE && RobotX - x >= -SQUARE_SIZE) && (RobotY - y <= SQUARE_SIZE && RobotY-y >= -SQUARE_SIZE)))
-    {
-        Result[id.xy] = float4(0,1,0,1);
+    if (
+        (RobotX - x < SQUARE_SIZE && RobotX - x > -SQUARE_SIZE) && 
+        (RobotY - y < SQUARE_SIZE && RobotY-y > -SQUARE_SIZE)
+    ) {
+        Result[id.xy] = float4(1,0,1,1);
     }
     else
     {
-        Result[id.xy] = float4(val, val, val, 1.0);
+        Result[id.xy] = float4(val, val, val, 1.0-val);
     }
     
 }

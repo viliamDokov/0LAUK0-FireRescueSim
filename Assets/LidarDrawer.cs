@@ -21,9 +21,6 @@ public class LidarDrawer : MonoBehaviour
     public RawImage targetImage;
     public RawImage heatOverlay;
 
-    private Texture2D texture;
-    private Texture2D heatOverlayTexture;
-
     private int Size = 100;
     public Color color = Color.cyan;
     public BaseSlamScript baseSlam;
@@ -35,42 +32,105 @@ public class LidarDrawer : MonoBehaviour
     private int heatMapX;
     private int heatMapZ;
     public ReadHeatData heatData;
-    public int fireScaler = 3;
+    public int fireRadius = 100;
     public float fireDesaturation = 0.0001f;
     public static float TRAIL_TIME = 30.0f;
 
     public ComputeShader ImageDrawShader; 
+    public ComputeShader HeatMapShader; 
 
     Gradient gradient = new Gradient();
-    public RenderTexture testTexture;
-    
+    public RenderTexture slamMapTexture;
+    public Texture2D heatMapTexture;
+    public float MAX_TEMP = 250;
+    public float TEMP_MIN_ALPHA = 0.2f;
+    public float FADE_DURATION = 10f;
+
+    private Gradient HeatMapGradient;
+    private Color32[] heatMapColors;
+
+    public ScaleDrawe heatScale;
+    public RawImage heatScaleImage;
+    private Texture2D heatScaleTexture;
+
+    public int heatScaleWidth = 30;
+    public int heatScaleHeigth= 100;
+
     // Start is called before the first frame update
     void Start()
     {
-        gradient = heatData.gradient;
+        Debug.Log("STARTING!");
         slam = baseSlam;
         Size = slam.SlamMapSize;
-        texture = new Texture2D(Size, Size);
-        targetImage.texture = texture;
-        heatOverlayTexture = new Texture2D(Size, Size);
-        heatOverlay.texture = heatOverlayTexture;
         
-        Vector2 dimensions = texture.Size();
-        heatMap = new HeatMapData[(int)dimensions.x, (int)dimensions.y];
+        heatMap = new HeatMapData[Size, Size];
 
-        testTexture = new RenderTexture(Size, Size, 1);
-        testTexture.enableRandomWrite = true;
-        targetImage.texture = testTexture;
-        testTexture.Create();
-        ImageDrawShader.SetTexture(0, "Result", testTexture);
+        slamMapTexture = new RenderTexture(Size, Size, 1);
+        slamMapTexture.enableRandomWrite = true;
+        targetImage.texture = slamMapTexture;
+        slamMapTexture.Create();
+        ImageDrawShader.SetTexture(0, "Result", slamMapTexture);
         ImageDrawShader.SetFloat("Resolution", Size);
+
+
+        heatMapTexture = new Texture2D(Size, Size);
+        heatMapColors = new Color32[Size*Size];
+        heatOverlay.texture = heatMapTexture; 
+
+        HeatMapGradient = new Gradient();
+        HeatMapGradient.mode = GradientMode.PerceptualBlend;
+        var colors = new GradientColorKey[]
+        {
+            new GradientColorKey(Color.blue, 0.0f),
+            new GradientColorKey(Color.cyan, 0.25f),
+            new GradientColorKey(Color.green, 0.5f),
+            new GradientColorKey(Color.yellow, 0.75f),
+            new GradientColorKey(Color.red, 1f),
+        };
+        var alphas = new GradientAlphaKey[]
+        {
+            new GradientAlphaKey(1.0f, colors[0].time),
+            new GradientAlphaKey(1.0f, colors[1].time),
+            new GradientAlphaKey(1.0f, colors[2].time),
+            new GradientAlphaKey(1.0f, colors[3].time),
+            new GradientAlphaKey(1.0f, colors[4].time),
+        };
+        HeatMapGradient.alphaKeys = alphas;
+        HeatMapGradient.colorKeys = colors;
+
+        heatScale.MIN = 0.0f;
+        heatScale.MAX = MAX_TEMP;
+        heatScale.heatScaleGradient = HeatMapGradient;
+
+         
+        heatScaleTexture = new Texture2D(heatScaleWidth, heatScaleHeigth);
+        heatScaleImage.texture = heatScaleTexture;
+
+        for (int i = 0; i < heatScaleHeigth; i++)
+        {
+            Color color = HeatMapGradient.Evaluate(i / (float)heatScaleHeigth);
+            for (int j = 0; j < heatScaleWidth; j++)
+            {
+                heatScaleTexture.SetPixel(j, i, color);
+            }
+        }
+        heatScaleTexture.Apply();
+
+        //heatMapTexture = new RenderTexture(Size, Size, 1);
+        //heatMapTexture.enableRandomWrite = true;
+        //heatOverlay.texture = heatMapTexture;
+        //heatMapTexture.Create();
+
+        //Debug.Log("THIGN!!");
+        //HeatMapShader.SetTexture(0, "Result", heatMapTexture);
+        //HeatMapShader.SetFloat("Resolution", Size);
+
     }
 
     // Update is called once per frame
     void Update()
     {
         //UpdateImage();
-
         var robotMapPose = slam.EstimatedPose * slam.scale;
 
         var computeBuffer = new ComputeBuffer(slam.MapData.Length, sizeof(uint));
@@ -79,86 +139,56 @@ public class LidarDrawer : MonoBehaviour
         ImageDrawShader.SetInt("RobotX", (int)robotMapPose.X);
         ImageDrawShader.SetInt("RobotY", (int)robotMapPose.Y);
         ImageDrawShader.GetKernelThreadGroupSizes(0, out uint x, out uint y, out uint z);
-        ImageDrawShader.Dispatch(0, testTexture.width / (int)x, testTexture.height / (int)y, (int)z);
+        ImageDrawShader.Dispatch(0, slamMapTexture.width / (int)x, slamMapTexture.height / (int)y, (int)z);
+        DrawHeatData();
     }
 
-
-    private void UpdateImage()
+    private void DrawHeatData()
     {
-        uint[] GrayValues = slam.MapData;
-        var mapPose = slam.WorldPoseToMapPose(RobotPosition.position);
-        var estimatedPose = slam.EstimatedPose;
-        estimatedPose = estimatedPose * slam.scale;
-        var currTime = Time.time;
+        float currentTime = Time.time;
 
-        //Debug.Log($"POSATO {mapPose.X} {mapPose.Y}");
-
-        //Debug.Log($"ESTIMADE: {texture.width} {texture.height }");
-        for (int x = 0; x < texture.width; x++)
+        for (int i = 0; i < Size; i ++)
         {
-            for (int y = 0; y < texture.height; y++)
+            for (int j = 0; j < Size; j ++) 
             {
-                Color color;
-                if (x < 10 && y < 10)
+                if (heatMap[i,j].temp > 0) 
                 {
-                    color = Color.cyan;
-                }
-                else if (Mathf.Abs(x - mapPose.X) < 2 && Mathf.Abs(y - mapPose.Y) < 2)
+                    var color = HeatMapGradient.Evaluate(heatMap[i, j].temp);
+                    color.a = Math.Clamp(1 - (currentTime - heatMap[i, j].time) / FADE_DURATION,TEMP_MIN_ALPHA,1);
+                    heatMapColors[(Size-1-i) + Size *j] = color;
+                } else
                 {
-                    color = Color.red;
-                }
-                else if (Mathf.Abs(x - estimatedPose.X) < 2 && Mathf.Abs(y - estimatedPose.Y) < 2)
-                {
-                    color = Color.green;
-                }
-                else
-                {
-                    uint alpha = GrayValues[x + Size * y];
-                    color = new Color32(255, 255, 255, (byte) (alpha>>8));
-                }
-                texture.SetPixel(Size - x, y, color);
-
-                if (currTime - heatMap[x, y].time < TRAIL_TIME && heatMap[x, y].temp > 0)
-                {
-                    //color = new Color(heatMap[x, y] / 100f, 0.2f, 0.2f, heatMapDesaturation[x, y]);
-                    color = gradient.Evaluate(heatMap[x, y].temp / 150f);
-                    var alpha = Math.Clamp(TRAIL_TIME - (currTime - heatMap[x, y].time), 0, TRAIL_TIME) / TRAIL_TIME;
-                    color.a = alpha;
-                    heatOverlayTexture.SetPixel(Size - x, y, color);
-                }
-                else
-                {
-                    heatOverlayTexture.SetPixel(Size - x, y, new Color(0f, 0f, 0f, 0f));
+                    heatMapColors[(Size - 1 - i) + Size * j] = new Color(1.0f, 1.0f, 1.0f,1.0f);
                 }
             }
         }
-        texture.Apply();
-        heatOverlayTexture.Apply();
+        heatMapTexture.SetPixels32(heatMapColors, 0);
+        heatMapTexture.Apply();
     }
 
     public void updateHeatData(float x, float y)
     {
-        //int normalizedX = heatData.NormalizeX(x);
-        //int normalizedZ = heatData.NormalizeZ(y);
-
         var mapPoseHeat = slam.EstimatedPose * slam.scale;
         int mapPoseX = Mathf.RoundToInt(mapPoseHeat.X);
         int mapPoseY = Mathf.RoundToInt(mapPoseHeat.Y);
 
         float temp = heatData.GetCurrentHeatDataPoint(x, y);
-        Debug.Log(temp);
+        Debug.Log($"HEATMAP: {heatMap.GetLength(0)}");
 
-        for (int i = -fireScaler; i < fireScaler + 1; i++)
+        for (int i = -fireRadius; i < fireRadius + 1; i++)
         {
-            for (int j = -fireScaler; j < fireScaler + 1; j++)
+            for (int j = -fireRadius; j < fireRadius + 1; j++)
             {
-                var xIdx = Mathf.Clamp(mapPoseX + i, 0, heatMap.GetLength(0)-1); 
-                var yIdx = Mathf.Clamp(mapPoseY + j, 0, heatMap.GetLength(1)-1);
-                var tempMapValue = temp * (float)(1 - (float)(Mathf.Abs(i) + Mathf.Abs(j)) / (float)(10 * fireScaler));
-                heatMap[xIdx, yIdx] = new HeatMapData{ temp = tempMapValue, time = Time.time };
+                if(i*i + j*j <= fireRadius*fireRadius) // Draw an actual circle
+                {
+                    var xIdx = Mathf.Clamp(mapPoseX + i, 0, heatMap.GetLength(0) - 1);
+                    var yIdx = Mathf.Clamp(mapPoseY + j, 0, heatMap.GetLength(1) - 1);
+                    var tempMapValue = temp / MAX_TEMP;
+                    Debug.Log(tempMapValue);
+                    heatMap[xIdx, yIdx].temp = tempMapValue;
+                    heatMap[xIdx, yIdx].time = Time.time;
+                }
             }
         }
-
-        //SetFireColor(temp);
     }
 }

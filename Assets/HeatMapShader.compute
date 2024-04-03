@@ -1,0 +1,55 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+struct HeatData
+{
+    float temp;
+    float time;
+};
+
+RWTexture2D<float4> Result;
+float Resolution;
+
+StructuredBuffer<HeatData> HeatMap;
+
+static float4 RED = float4(1, 0, 0, 1);
+static float4 GREEN = float4(0, 1, 0, 1);
+static float4 BLUE = float4(0, 0, 1, 1);
+static float4 CYAN = float4(0, 1, 1, 1);
+static float4 YELLOW = float4(1, 1, 0, 1);
+
+
+float4 ComputeColor(float temp)
+{
+    const int N_COLORS = 5;
+    const float4 gradientColors[N_COLORS] =  { BLUE, CYAN, GREEN, YELLOW, RED };
+    
+    int idx1 = floor(N_COLORS * temp);
+    int idx2 = ceil(N_COLORS * temp);
+    
+    float4 color1 = gradientColors[idx1];
+    float4 color2 = gradientColors[idx2];
+    
+    float middle = ((5.0 * temp) - ((float) floor(5.0 * temp)));
+    float4 lerp = (color2 - color1) * middle;
+    return color1 + lerp;
+}
+
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+    HeatData heatData = HeatMap[id.y + Resolution * (Resolution - id.x)];
+    
+    if (heatData.temp > 0)
+    {
+        Result[id.xy] = ComputeColor(heatData.temp);
+    }
+    else
+    {
+        Result[id.xy] = float4(0.0, 0.0, 0.0, 0.0);
+    }
+}

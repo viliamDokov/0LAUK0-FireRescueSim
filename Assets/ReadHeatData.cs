@@ -30,27 +30,9 @@ public class ReadHeatData : MonoBehaviour
 
     public TextAsset heatValuesAsset;
 
-    public int legendWidth = 30;
-    public int legendHeight = 100;
-    public RawImage targetImage;
-    private Texture2D texture;
-
-    public Gradient gradient = new Gradient();
     // Start is called before the first frame update
     void Start()
     {
-        var colors = new GradientColorKey[2];
-        colors[0] = new GradientColorKey(Color.cyan, 0.0f);
-        colors[1] = new GradientColorKey(Color.red, 1.0f);
-        var alphas = new GradientAlphaKey[2];
-        alphas[0] = new GradientAlphaKey(1.0f, 0.0f);
-        alphas[1] = new GradientAlphaKey(1.0f, 1.0f);
-
-        gradient.SetKeys(colors, alphas);
-
-        texture = new Texture2D(legendWidth, legendHeight);
-        targetImage.texture = texture;
-
         ParseData();
         //Debug.Log(x + " " + y);
         Debug.Log(maxHeat);
@@ -65,15 +47,7 @@ public class ReadHeatData : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < legendHeight; i++)
-        {
-            Color color = gradient.Evaluate((float) i / (float)legendHeight);
-            for (int j = 0; j < legendWidth; j++)
-            {
-                texture.SetPixel(j, i, color);
-            }
-        }
-        texture.Apply();
+       
     }
 
     // Update is called once per frame
