@@ -60,7 +60,8 @@ public class ReadHeatData : MonoBehaviour
             for (int j = 0; j < y; j++)
             {
                 fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i * x_coef - x_const, 2, (float)j * y_coef - y_const), Quaternion.identity);
-                fireCubes[i, j].transform.localScale = new Vector3(x_coef, 0.1f, y_coef);
+                var shape = fireCubes[i, j].GetComponent<ParticleSystem>().shape;
+                shape.scale = new Vector3(x_coef, y_coef, 1f);
             }
         }
 
@@ -78,13 +79,19 @@ public class ReadHeatData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //ParticleSystem.MainModule settings = GetComponent<ParticleSystem>().main.startColor = ;
+
+        
         for (int i = 0; i < x; i++)
         {
             for (int j = 0; j < y; j++)
             {
                 float temp = GetCurrentHeatDataPoint((float)i * x_coef - x_const, (float)j * y_coef - y_const);
                 //Debug.Log(temp);
-                fireCubes[i, j].GetComponent<Renderer>().material.SetColor("_Color", new Color(temp/100f, 0f, 0f, 0.7f));
+                //fireCubes[i, j].GetComponent<Renderer>().material.SetColor("_Color", new Color(temp/100f, 0f, 0f, 0.7f));
+                //fireCubes[i, j].GetComponent<ParticleSystem>().startColor = new Color(temp / 100f, 0f, 0f, 0.1f);
+
+                fireCubes[i, j].GetComponent<ParticleSystem>().emissionRate = (int)(temp - 20) / 2;
                 //Debug.Log(fireCubes[i, j].GetComponent<Renderer>().material.GetColor("_Color"));
             }
         }
