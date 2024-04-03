@@ -44,6 +44,6 @@ public class MoveWheels2 : MonoBehaviour
         Transform sensor = gameObject.transform.Find("Cube");
         //Debug.Log(Time.time);
 
-        Debug.Log(gameController.GetComponent<ReadHeatData>().GetCurrentHeatDataPoint(sensor.position.x, 0, sensor.position.z));
+        //Debug.Log(gameController.GetComponent<ReadHeatData>().GetCurrentHeatDataPoint(sensor.position.x, 0, sensor.position.z));
     }
 }
