@@ -18,7 +18,7 @@ public interface ISlamComponent
     public System.Numerics.Vector3 MapStartPose { get; }
     public System.Numerics.Vector3 EstimatedPose { get; }
     public abstract void UpdateSlam(List<BaseSLAM.Ray> cloud);
-    public byte[] MapData { get; }
+    public uint[] MapData { get; }
 
     public System.Numerics.Vector3 WorldPoseToMapPose(Vector3 worldPose)
     {

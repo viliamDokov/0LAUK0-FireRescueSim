@@ -21,8 +21,8 @@ public class BaseSlamScript : MonoBehaviour, ISlamComponent
 
     public System.Numerics.Vector3 MapStartPose => _mapStartPose;
 
-    public byte[] MapData => ConvertData();
-
+    public uint[] MapData => ConvertData();
+    private uint[] mapData = new uint[_slamMapSize * _slamMapSize];
     public System.Numerics.Vector3 EstimatedPose => SLAMProcessor.Pose;
 
     private CoreSLAMProcessor SLAMProcessor;
@@ -31,7 +31,7 @@ public class BaseSlamScript : MonoBehaviour, ISlamComponent
     // Start is called before the first frame update
     void Start()
     {
-        SLAMProcessor = new CoreSLAMProcessor(RealMapSize, SlamMapSize, 64, MapStartPose, 0.1f, MathEx.DegToRad(10), 1000, 4)
+        SLAMProcessor = new CoreSLAMProcessor(RealMapSize, SlamMapSize, 64, MapStartPose, 0.1f, MathEx.DegToRad(10), 2000, 4)
         {
             HoleWidth = 2.0f
         };
@@ -44,18 +44,18 @@ public class BaseSlamScript : MonoBehaviour, ISlamComponent
         }
     }
 
-    private byte[] ConvertData()
+    private uint[] ConvertData()
     {
-        var result = new byte[SLAMProcessor.HoleMap.Pixels.Length];
-        for (int i = 0; i < result.Length; i++)
+        
+        for (int i = 0; i < mapData.Length; i++)
         {
-            result[i] = (byte)(SLAMProcessor.HoleMap.Pixels[i] >> 8);
+            mapData[i] = (uint)(SLAMProcessor.HoleMap.Pixels[i] >> 8);
             //if (result[i] > 100)
             //{
             //    Debug.Log($"BIGGER {i}");
             //}
         }
-        return result;
+        return mapData;
     }
 
     public void UpdateSlam(List<BaseSLAM.Ray> rays)

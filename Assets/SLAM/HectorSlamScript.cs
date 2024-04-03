@@ -24,7 +24,7 @@ public class HectorSlamScript : MonoBehaviour, ISlamComponent
 
     public System.Numerics.Vector3 EstimatedPose => slamProcessor.MatchPose;
 
-    public byte[] MapData => slamProcessor.MapRep.Maps[0].GetBitmapData();
+    public uint[] MapData => throw new NotImplementedException();
 
     private HectorSLAMProcessor slamProcessor;
     private CoreSLAMProcessor coreSlam;

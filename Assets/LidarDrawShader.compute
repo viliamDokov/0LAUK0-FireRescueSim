@@ -1,0 +1,39 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+struct HeatData
+{
+    float temp;
+    float time;
+};
+
+RWTexture2D<float4> Result;
+StructuredBuffer<int> MapData;
+StructuredBuffer<HeatData> HeatMap;
+float Resolution;
+
+int RobotX;
+int RobotY;
+
+[numthreads(1,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+    
+    const int SQUARE_SIZE = 3;
+    int x = Resolution - id.x;
+    int y = id.y;
+    float val = MapData[Resolution-id.x + id.y * Resolution] / (255);
+    
+    if (((RobotX - x <= SQUARE_SIZE && RobotX - x >= -SQUARE_SIZE) && (RobotY - y <= SQUARE_SIZE && RobotY-y >= -SQUARE_SIZE)))
+    {
+        Result[id.xy] = float4(0,1,0,1);
+    }
+    else
+    {
+        Result[id.xy] = float4(val, val, val, 1.0);
+    }
+    
+}

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public struct LidarReading {
     public float distance;
@@ -33,6 +34,8 @@ public class LidarScan : MonoBehaviour
 
     public delegate void ReadingHandler(List<BaseSLAM.Ray> cloud);
     public event ReadingHandler ProcessData;
+    public float RandomStrength;
+    private System.Random rdm = new System.Random();
 
     // Start is called before the first frame update
     void Start()
@@ -107,7 +110,8 @@ public class LidarScan : MonoBehaviour
                 layerMask: TargetLayers)
             )
             {
-                rays.Add(new BaseSLAM.Ray(angle, hit.distance));
+                var noise = rdm.NextDouble()-0.5f;
+                rays.Add(new BaseSLAM.Ray(angle, hit.distance + (float)noise));
             }
         }
     }
