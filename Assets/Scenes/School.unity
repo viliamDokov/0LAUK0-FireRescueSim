@@ -1327,6 +1327,10 @@ PrefabInstance:
       propertyPath: RobotPosition
       value: 
       objectReference: {fileID: 723690570}
+    - target: {fileID: 6109677449016123913, guid: e9d2aa10100c48c4cb47634cb624f74b, type: 3}
+      propertyPath: TEMP_MIN_ALPHA
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 6114408008711715614, guid: e9d2aa10100c48c4cb47634cb624f74b, type: 3}
       propertyPath: m_Pivot.x
       value: 0
