@@ -17,7 +17,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 {
     // TODO: insert actual code here!
     
-    const int SQUARE_SIZE = 3;
+    const int SQUARE_SIZE = 5;
     int x = Resolution - id.x;
     int y = id.y;
     float val = MapData[Resolution-id.x + id.y * Resolution] / (255);
