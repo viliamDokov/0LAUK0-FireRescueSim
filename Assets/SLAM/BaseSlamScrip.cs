@@ -26,12 +26,19 @@ public class BaseSlamScript : MonoBehaviour, ISlamComponent
     public System.Numerics.Vector3 EstimatedPose => SLAMProcessor.Pose;
 
     private CoreSLAMProcessor SLAMProcessor;
-    
+
+    public Transform LowerBound;
+    public Transform UpperBound;
 
     // Start is called before the first frame update
     void Start()
     {
-        _mapStartPose = new System.Numerics.Vector3(_realMapSize / 2, _realMapSize / 2, 0);
+        _worldStartPose = transform.position;
+        var boundingBox = UpperBound.position - LowerBound.position;
+        _realMapSize = Mathf.Max(boundingBox.x, boundingBox.z);
+        var mapStartPoseUVec =  _worldStartPose - LowerBound.position;
+        Debug.Log($"START{mapStartPoseUVec.x} {mapStartPoseUVec.z}"); 
+        _mapStartPose = new System.Numerics.Vector3(_realMapSize - mapStartPoseUVec.x,mapStartPoseUVec.z, 0);
         mapData = new uint[_slamMapSize * _slamMapSize];
 
 
@@ -40,7 +47,6 @@ public class BaseSlamScript : MonoBehaviour, ISlamComponent
             HoleWidth = 2.0f
         };
 
-        _worldStartPose = transform.position;
 
         if (lidar != null)
         {
