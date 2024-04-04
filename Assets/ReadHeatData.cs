@@ -24,9 +24,9 @@ public class ReadHeatData : MonoBehaviour
     public float y_const = 50;
     public bool inverted = false;
     
-    public GameObject fireCubePrefab;
+    public GameObject fireEffectPrefab;
 
-    private GameObject[,] fireCubes;
+    private GameObject[,] fireEffects;
 
     public TextAsset heatValuesAsset;
 
@@ -36,13 +36,13 @@ public class ReadHeatData : MonoBehaviour
         ParseData();
         //Debug.Log(x + " " + y);
         Debug.Log(maxHeat);
-        fireCubes = new GameObject[x,y];
+        fireEffects = new GameObject[x,y];
         for (int i = 0; i < x; i++)
         {
             for (int j = 0; j < y; j++)
             {
-                fireCubes[i, j] = Instantiate(fireCubePrefab, new Vector3((float)i * x_coef - x_const, 2, (float)j * y_coef - y_const), Quaternion.identity);
-                var shape = fireCubes[i, j].GetComponent<ParticleSystem>().shape;
+                fireEffects[i, j] = Instantiate(fireEffectPrefab, new Vector3((float)i * x_coef - x_const, 2, (float)j * y_coef - y_const), Quaternion.identity);
+                var shape = fireEffects[i, j].GetComponent<ParticleSystem>().shape;
                 shape.scale = new Vector3(x_coef, y_coef, 1f);
             }
         }
@@ -65,7 +65,7 @@ public class ReadHeatData : MonoBehaviour
                 //fireCubes[i, j].GetComponent<Renderer>().material.SetColor("_Color", new Color(temp/100f, 0f, 0f, 0.7f));
                 //fireCubes[i, j].GetComponent<ParticleSystem>().startColor = new Color(temp / 100f, 0f, 0f, 0.1f);
 
-                fireCubes[i, j].GetComponent<ParticleSystem>().emissionRate = (int)(temp - 20) / 2;
+                fireEffects[i, j].GetComponent<ParticleSystem>().emissionRate = Mathf.Min((int)(temp - 20) / 10, 10);
                 //Debug.Log(fireCubes[i, j].GetComponent<Renderer>().material.GetColor("_Color"));
             }
         }

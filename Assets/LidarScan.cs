@@ -110,7 +110,8 @@ public class LidarScan : MonoBehaviour
                 layerMask: TargetLayers)
             )
             {
-                var noise = rdm.NextDouble()-0.5f;
+                //var noise = rdm.NextDouble()-0.5f;
+                var noise = 0;
                 rays.Add(new BaseSLAM.Ray(angle, hit.distance + (float)noise));
             }
         }

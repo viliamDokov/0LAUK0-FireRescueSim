@@ -8,11 +8,11 @@ using UnityEngine;
 public class BaseSlamScript : MonoBehaviour, ISlamComponent
 {
     public LidarScan lidar;
-
-    private static int _slamMapSize = 350;
-    private static float _realMapSize = 200;
+    
+    public int _slamMapSize = 350;
+    public float _realMapSize = 200;
     private Vector3 _worldStartPose;
-    private System.Numerics.Vector3 _mapStartPose = new System.Numerics.Vector3(_realMapSize / 2, _realMapSize / 2, 0);
+    private System.Numerics.Vector3 _mapStartPose;
     public int SlamMapSize => _slamMapSize;
 
     public float RealMapSize => _realMapSize;
@@ -22,7 +22,7 @@ public class BaseSlamScript : MonoBehaviour, ISlamComponent
     public System.Numerics.Vector3 MapStartPose => _mapStartPose;
 
     public uint[] MapData => ConvertData();
-    private uint[] mapData = new uint[_slamMapSize * _slamMapSize];
+    private uint[] mapData;
     public System.Numerics.Vector3 EstimatedPose => SLAMProcessor.Pose;
 
     private CoreSLAMProcessor SLAMProcessor;
@@ -31,6 +31,10 @@ public class BaseSlamScript : MonoBehaviour, ISlamComponent
     // Start is called before the first frame update
     void Start()
     {
+        _mapStartPose = new System.Numerics.Vector3(_realMapSize / 2, _realMapSize / 2, 0);
+        mapData = new uint[_slamMapSize * _slamMapSize];
+
+
         SLAMProcessor = new CoreSLAMProcessor(RealMapSize, SlamMapSize, 64, MapStartPose, 0.1f, MathEx.DegToRad(10), 2000, 4)
         {
             HoleWidth = 2.0f
