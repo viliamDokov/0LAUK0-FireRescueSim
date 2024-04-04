@@ -5527,6 +5527,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 898027708}
     - target: {fileID: 7853258939711632597, guid: 0028ac56187da3741be3c917b2477df4, type: 3}
+      propertyPath: inverted
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7853258939711632597, guid: 0028ac56187da3741be3c917b2477df4, type: 3}
       propertyPath: targetImage
       value: 
       objectReference: {fileID: 1861393106}
@@ -5538,6 +5542,10 @@ PrefabInstance:
       propertyPath: gradient.ctime0
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7853258939711632597, guid: 0028ac56187da3741be3c917b2477df4, type: 3}
+      propertyPath: heatValuesAsset
+      value: 
+      objectReference: {fileID: 4900000, guid: 960da7109b2c1174382be0e04667523e, type: 3}
     - target: {fileID: 8639297738943032535, guid: 0028ac56187da3741be3c917b2477df4, type: 3}
       propertyPath: m_Name
       value: Robot
