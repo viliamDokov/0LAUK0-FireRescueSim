@@ -1,0 +1,201 @@
+&HEAD CHID='School2', 
+      TITLE='School2' /
+
+&TIME T_END=300
+
+&MESH ID  = 'School'
+      IJK = 86, 72, 6, 
+      XB  = 0, 43,     0, 36,     0, 3 /
+
+# ---------------------------------------
+# Surface definition (boundary conditions)
+# ---------------------------------------
+
+&SURF ID                      = 'Wall Lining',
+      COLOR                   = 'GRAY',
+      DEFAULT                 = T,
+      THICKNESS(1:1)          = 0.254,
+      MATL_ID(1,1:1)          = 'MARINITE',
+      MATL_MASS_FRACTION(1,1) = 1.0 /
+
+&MATL ID            = 'MARINITE'
+      EMISSIVITY    = 0.9
+      DENSITY       = 737.
+      SPECIFIC_HEAT = 1.2
+      CONDUCTIVITY  = 0.12 /
+
+
+# walls bottom
+&OBST ID        = 'Wall Bottom 1',
+      SURF_ID   = 'Wall Lining',
+      XB        = 0.0, 21.0,  0.0,  0.0, 0.0, 3.0 /
+
+
+&OBST ID        = 'Wall Bottom 2',
+      SURF_ID   = 'Wall Lining',
+      XB        = 21.0, 43.0,  10.0,  10.0, 0.0, 3.0 /
+
+# walls top
+&OBST ID        = 'Wall Top 1',
+      SURF_ID   = 'Wall Lining',
+      XB        =  0.0, 12.0, 36.0, 36.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Top 2',
+      SURF_ID   = 'Wall Lining',
+      XB        =  12.0, 21.0, 30.0, 30.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Top 3',
+      SURF_ID   = 'Wall Lining',
+      XB        =  21.0, 43.0, 36.0, 36.0, 0.0, 3.0 /
+
+# walls left
+&OBST ID        = 'Wall Left1',
+      SURF_ID   = 'Wall Lining',
+      XB        = 0.0, 0.0, 0.0, 36.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Left2',
+      SURF_ID   = 'Wall Lining',
+      XB        = 12.0, 12.0, 30.0, 36.0, 0.0, 3.0 /
+
+# walls right
+&OBST ID        = 'Wall Right1',
+      SURF_ID   = 'Wall Lining',
+      XB        =  21.0, 21.0, 0.0, 10.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Right2',
+      SURF_ID   = 'Wall Lining',
+      XB        =  43.0, 43.0, 10.0, 36.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Right3',
+      SURF_ID   = 'Wall Lining',
+      XB        = 21.0, 21.0, 30.0, 36.0, 0.0, 3.0 /
+
+
+# internal walls
+&OBST ID        = 'Wall Internal H1',
+      SURF_ID   = 'Wall Lining',
+      XB        = 0.0, 12.0, 12.0, 12.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H2',
+      SURF_ID   = 'Wall Lining',
+      XB        = 0.0, 12.0, 24.0, 24.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H3',
+      SURF_ID   = 'Wall Lining',
+      XB        = 0.0, 12.0, 26.0, 26.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H4',
+      SURF_ID   = 'Wall Lining',
+      XB        = 12.0, 21.0, 10.0, 10.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H5',
+      SURF_ID   = 'Wall Lining',
+      XB        = 12.0, 21.0, 26.0, 26.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H6',
+      SURF_ID   = 'Wall Lining',
+      XB        = 12.0, 21.0, 28.0, 28.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H7',
+      SURF_ID   = 'Wall Lining',
+      XB        = 21.0, 30.0, 22.0, 22.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H8',
+      SURF_ID   = 'Wall Lining',
+      XB        = 34.0, 43.0, 22.0, 22.0, 0.0, 3.0 /
+
+
+
+&OBST ID        = 'Wall Internal H9',
+      SURF_ID   = 'Wall Lining',
+      XB        = 21.0, 30.0, 24.0, 24.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal H9',
+      SURF_ID   = 'Wall Lining',
+      XB        = 34.0, 43.0, 24.0, 24.0, 0.0, 3.0 /
+
+
+&OBST ID        = 'Wall Internal V1',
+      SURF_ID   = 'Wall Lining',
+      XB        = 12.0, 12.0, 0.0, 36.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal V2',
+      SURF_ID   = 'Wall Lining',
+      XB        = 21.0, 21.0, 10.0, 22.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal V3',
+      SURF_ID   = 'Wall Lining',
+      XB        = 30.0, 30.0, 10.0, 22.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal V4',
+      SURF_ID   = 'Wall Lining',
+      XB        = 30.0, 30.0, 24.0, 36.0, 0.0, 3.0 /
+
+
+&OBST ID        = 'Wall Internal V5',
+      SURF_ID   = 'Wall Lining',
+      XB        = 21.0, 21.0, 24.0, 36.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal V6',
+      SURF_ID   = 'Wall Lining',
+      XB        = 34.0, 34.0, 10.0, 22.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal V7',
+      SURF_ID   = 'Wall Lining',
+      XB        = 34.0, 34.0, 24.0, 36.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal V8',
+      SURF_ID   = 'Wall Lining',
+      XB        = 4.0, 4.0, 24.0, 26.0, 0.0, 3.0 /
+
+&OBST ID        = 'Wall Internal V9',
+      SURF_ID   = 'Wall Lining',
+      XB        = 16.0, 16.0, 26.0, 28.0, 0.0, 3.0 /
+
+# Internal doors
+&HOLE ID = 'Door1', XB = 11.0, 13.0, 10.0, 11.0, 0.0, 2.5 /
+&HOLE ID = 'Door2', XB = 11.0, 13.0, 25.0, 26.0, 0.0, 2.5 /
+
+&HOLE ID = 'Door3', XB = 10.0, 11.0, 24.0, 26.0, 0.0, 2.5 /
+&HOLE ID = 'Door4', XB = 10.0, 11.0, 25.0, 27.0, 0.0, 2.5 /
+
+&HOLE ID = 'Door5', XB = 11.0, 13.0, 27.0, 28.0, 0.0, 2.5 /
+&HOLE ID = 'Door6', XB = 11.0, 13.0, 29.0, 30.0, 0.0, 2.5 /
+
+&HOLE ID = 'Door7', XB = 20.0, 21.0,  9.0, 11.0, 0.0, 2.5 /
+&HOLE ID = 'Door8', XB = 16.0, 17.0, 25.0, 27.0, 0.0, 2.5 /
+
+
+&HOLE ID = 'Door9', XB = 29.0, 30.0,  21.0, 24.0, 0.0, 2.5 /
+&HOLE ID = 'Door10', XB = 34.0, 36.0,  21.0, 24.0, 0.0, 2.5 /
+
+&HOLE ID = 'Door11', XB = 29.0, 30.0,  23.0, 26.0, 0.0, 2.5 /
+&HOLE ID = 'Door12', XB = 34.0, 36.0,  23.0, 26.0, 0.0, 2.5 /
+
+
+# empty spaces
+
+
+&VENT XB= 12.0, 21.0, 36.0, 36.0, 0.0, 3.0, SURF_ID='OPEN' /
+&VENT XB= 12.0, 43.0,  0.0, 0.0, 0.0, 3.0, SURF_ID='OPEN' /
+&VENT XB= 43.0, 43.0,  0.0, 10.0, 0.0, 3.0, SURF_ID='OPEN' /
+&VENT XB= 43.0, 43.0, 22.0, 23.0, 0.0, 3.0, SURF_ID='OPEN' /
+
+
+&HOLE ID = 'External Door'
+      XB = 42.0, 44.0, 22.0, 24.0, 0.0, 2.5, /
+
+
+&REAC FUEL = 'PROPANE'
+
+&VENT XB= 1, 42, 1, 35, 0, 0, SURF_ID='fire', XYZ= 40, 15, 0, SPREAD_RATE=0.1  /
+
+&SURF ID='fire', HRRPUA=500, RAMP_Q='fireramp' /
+&RAMP ID='fireramp', T=  0,  F=0 /
+&RAMP ID='fireramp', T=  1,  F=1 /
+&RAMP ID='fireramp', T= 10,  F=1 /
+&RAMP ID='fireramp', T= 11,  F=0 /
+
+&SLCF PBZ=1.0, QUANTITY='TEMPERATURE', VECTOR=.TRUE. /
+
+&TAIL / 

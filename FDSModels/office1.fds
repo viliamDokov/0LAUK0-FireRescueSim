@@ -1,0 +1,75 @@
+&HEAD CHID='office1', TITLE='office1' /
+
+&MESH XB=0, 44,  0, 12,  0, 3,  IJK= 88, 24, 6 /
+&MESH  XB=44, 50,  6, 12,  0, 3,  IJK= 12, 12, 6 /
+&MESH  XB=50, 72,  0, 30,  0, 3,  IJK= 44, 60, 6 /
+&TIME T_END=300. /
+
+#vents
+&VENT XB= 26.0, 28.0, 12, 12, 0, 2, SURF_ID='OPEN' /
+&VENT XB= 26.0, 28.0, 0.0, 0.0, 0, 2, SURF_ID='OPEN' /
+
+&VENT XB= 50.0, 50.0, 16.0, 18.0, 0, 2, SURF_ID='OPEN' /
+&VENT XB= 50.0, 50.0, 20.0, 22.0, 0, 2, SURF_ID='OPEN' /
+
+#doors
+&HOLE XB= 59.1,  59.9, 7.9, 8.1, 0, 2, ID ='Door.001' /
+&HOLE XB= 63.1,  63.9, 7.9, 8.1, 0, 2, ID ='Door.002' /
+&HOLE XB= 69.1,  69.9, 7.9, 8.1, 0, 2, ID ='Door.003' /
+
+&HOLE XB= 55.1,  55.9, 23.9, 24.1, 0, 2, ID ='Door.004' /
+&HOLE XB= 60.1,  60.9, 23.9, 24.1, 0, 2, ID ='Door.005' /
+&HOLE XB= 71.1,  71.9, 23.9, 24.1, 0, 2, ID ='Door.005' /
+&HOLE XB= 71.1,  71.9, 17.9, 18.1, 0, 2, ID ='Door.006' /
+
+&HOLE XB= 29.1,  29.9, 1.9, 2.1, 0, 2, ID ='Door.007' /
+&HOLE XB= 31.1,  31.9, 1.9, 2.1, 0, 2, ID ='Door.008' /
+&HOLE XB= 33.1,  33.9, 1.9, 2.1, 0, 2, ID ='Door.009' /
+
+&HOLE XB= 29.1,  29.9, 9.9, 10.1, 0, 2, ID ='Door.010' /
+&HOLE XB= 31.1,  31.9, 9.9, 10.1, 0, 2, ID ='Door.011' /
+&HOLE XB= 33.1,  33.9, 9.9, 10.1, 0, 2, ID ='Door.012' /
+
+# vertical walls
+&OBST XB=6.0, 6.1, 2.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=16.0, 16.1, 2.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=26.0, 26.1, 2.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=28.0, 28.1, 2.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=30.0, 30.1, 2.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=32.0, 32.1, 2.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=34.0, 34.1, 2.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+
+&OBST XB=56.0, 56.1, 2.0, 8.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=62.0, 62.1, 0.0, 8.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=68.0, 68.1, 0.0, 8.0, 0.0, 3.0 COLOR='BLUE'/
+
+&OBST XB=58.0, 58.1, 24.0, 30.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=68.0, 68.1, 24.0, 30.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=66.0, 66.1, 18.0, 24.0, 0.0, 3.0 COLOR='BLUE'/
+
+# horizontal walls
+&OBST XB=2.0, 10.0, 6.0, 6.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=12.0, 20.0, 6.0, 6.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=22.0, 26.0, 6.0, 6.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=28.0, 34.0, 2.0, 2.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=28.0, 34.0, 10.0, 10.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=28.0, 40.0, 6.0, 6.1, 0.0, 3.0 COLOR='BLUE'/
+
+&OBST XB=54.0, 72.0, 8.0, 8.1, 0.0, 3.0 COLOR='BLUE'/
+
+&OBST XB=50.0, 72.0, 24.0, 24.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=66.0, 72.0, 18.0, 18.1, 0.0, 3.0 COLOR='BLUE'/
+
+&REAC FUEL = 'PROPANE'
+
+&VENT XB= 1, 72, 1, 30, 0, 0, SURF_ID='fire', XYZ= 69, 21, 0, SPREAD_RATE=0.1  /
+
+&SURF ID='fire', HRRPUA=100, RAMP_Q='fireramp' /
+&RAMP ID='fireramp', T= 0,  F=0 /
+&RAMP ID='fireramp', T= 1,  F=1 /
+&RAMP ID='fireramp', T=10,  F=1 /
+&RAMP ID='fireramp', T=11,  F=0 /
+
+&SLCF PBZ=1.0, QUANTITY='TEMPERATURE', VECTOR=.TRUE. /
+
+&TAIL / 

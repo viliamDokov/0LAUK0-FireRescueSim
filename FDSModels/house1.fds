@@ -1,0 +1,48 @@
+&HEAD CHID='house1', TITLE='house1' /
+
+&MESH XB=0, 10,  0, 10,  0, 3,  IJK= 20, 20, 6 /
+&TIME T_END=300. /
+
+
+&VENT XB= 4.5, 5.5, 0.0, 0.0, 0, 2, SURF_ID='OPEN' /
+
+# open roof
+# &VENT XB= 0, 7, 0, 7, 3, 3, SURF_ID='OPEN' /
+
+# smaller scale
+# &HOLE XB= 1.1,  1.9, 3.9, 4.1, 0, 2, ID ='Door.001' /
+# &HOLE XB= 2.2,    3, 3.9, 4.1, 0, 2, ID ='Door.002' /
+# &HOLE XB= 3.9,  4.1, 2.0, 2.8, 0, 2, ID ='Door.003' /
+# &HOLE XB= 3.9,  4.1, 3.1, 3.9, 0, 2, ID ='Door.004' /
+
+&HOLE XB= 2.1,  2.9, 4.9, 5.1, 0, 2, ID ='Door.001' /
+&HOLE XB= 3.1,  3.9, 4.9, 5.1, 0, 2, ID ='Door.002' /
+&HOLE XB= 6.9,  7.1, 2.1, 2.9, 0, 2, ID ='Door.003' /
+&HOLE XB= 6.9,  7.1, 4.1, 4.9, 0, 2, ID ='Door.004' /
+
+# smaller scale
+# &OBST XB=4.0, 7.0, 3.0, 3.1, 0.0, 3.0 COLOR='BLUE'/
+# &OBST XB=4.0, 4.1, 0.0, 7.0, 0.0, 3.0 COLOR='BLUE'/
+# &OBST XB=0.0, 4.0, 4.0, 4.1, 0.0, 3.0 COLOR='BLUE'/
+# &OBST XB=2.0, 2.1, 4.0, 7.0, 0.0, 3.0 COLOR='BLUE'/
+
+&OBST XB=7.0, 7.1, 0.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=7.0, 10.0, 4.0, 4.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=0.0, 7.0, 5.0, 5.1, 0.0, 3.0 COLOR='BLUE'/
+&OBST XB=3.0, 3.1, 5.0, 10.0, 0.0, 3.0 COLOR='BLUE'/
+
+
+
+&REAC FUEL = 'PROPANE'
+
+&VENT XB= 1, 9, 1, 9, 0, 0, SURF_ID='fire', XYZ= 8, 8, 0, SPREAD_RATE=0.1  /
+
+&SURF ID='fire', HRRPUA=100, RAMP_Q='fireramp' /
+&RAMP ID='fireramp', T= 0,  F=0 /
+&RAMP ID='fireramp', T= 1,  F=1 /
+&RAMP ID='fireramp', T=10,  F=1 /
+&RAMP ID='fireramp', T=11,  F=0 /
+
+&SLCF PBZ=1.0, QUANTITY='TEMPERATURE', VECTOR=.TRUE. /
+
+&TAIL / 
